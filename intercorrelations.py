@@ -1,23 +1,32 @@
 import random
+#Imports a dictionary with categories to get selected_categories
 from categories import categories
 
-grid = [
+lives = 4
+
+grid = [ #Empty grid that will be filled with selected_categories
     ["Word", "Word", "Word", "Word"],
     ["Word", "Word", "Word", "Word"],
     ["Word", "Word", "Word", "Word"],
     ["Word", "Word", "Word", "Word"],
 ]
 
-def play_again():
-    user_input = input("Wanna play again? (Y or N)")
-    if user_input != "Y" or "N":
-        play_again()
-    elif user_input == "Y":
+def play_again_function(): #Asks user if they want to play again
+    user_input = str(input("Wanna play again? (Y or N)"))
+    if user_input == "Y":
         play_again = True
-        return play_again
-    else:
+        intercorrelations()
+    elif user_input == "N":
         play_again = False
-        return play_again
+        StopIteration
+    else:
+        play_again()
+    
+def intercorrelations():
+    play_game = True
+
+    while play_game is True:
+        main()
 
 def populate_grid(selected_categories, grid):
     row = 0
@@ -28,11 +37,13 @@ def populate_grid(selected_categories, grid):
             col += 1
         row += 1
 
-def select_categories():
+
+
+def select_categories(): #Selects categories for the game
     global selected_categories
     selected_categories = random.sample(categories, 4)
 
-def play_game():
+def main():
     # Select four random categories
     select_categories()
     # Populate the grid with words from the selected categories
@@ -40,11 +51,9 @@ def play_game():
 
     # Print the grid
     print("Welcome to the Intercorrelations!")
-    print("Here's the grid of words you have to connect into categories:")
-    print()  # Puts space between the text and the grid
+    print("Here's the grid of words you have to group into categories: \n")
     for row in grid:
         print(row)
-    
-    print(grid[0][0])
+    play_again_function()
 
-play_game()
+intercorrelations()
