@@ -11,6 +11,15 @@ grid = [ #Empty grid that will be filled with selected_categories
     ["Word", "Word", "Word", "Word"],
 ]
 
+def shuffle_grid(grid):
+    flat_grid = [word for row in grid for word in row] #Turns the grid into a list of all the words in the grid
+    random.shuffle(flat_grid) #Shuffles the list of words
+    index = 0
+    for row in range(len(grid)): #Puts grid back together with the shuffled words
+        for col in range(len(grid[row])):
+            grid[row][col] = flat_grid[index]
+            index += 1
+
 def play_again_function(): #Asks user if they want to play again
     while True:
         user_input = input("Wanna play Intercorrelations? (Y or N)").lower()
@@ -54,7 +63,14 @@ def check_win(guessed_categories, selected_categories):
 
 def get_guess(guessed_categories, selected_categories):
     while True:
-        guess = input("Enter four connected words (e.g., cake ice cream pie pudding): ").lower().split()
+        guess = input("Enter four connected words (e.g., cake icecream pie pudding): ").lower().split()
+
+        #Shuffle the grid if the user enters "shuffle"
+        if guess and guess[0] == "shuffle":
+            shuffle_grid(grid)
+            print("Grid shuffled!")
+            display_game_state(lives)
+            continue
 
         #Check if the guess has already been made
         if guess in [item["Guess"] for item in guessed_categories]:
@@ -82,6 +98,7 @@ def main():
 
     print("Welcome to the Intercorrelations!")
     print("Here's the grid of words you have to group into categories: \n")
+    shuffle_grid(grid)
     display_game_state(lives)
 
     while lives > 0:

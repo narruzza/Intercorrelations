@@ -31,7 +31,7 @@ categories = [
     {"Connecting Word": "Desserts", "Words": ["cake", "icecream", "pie", "pudding"]},
     {"Connecting Word": "Vegetables", "Words": ["carrot", "broccoli", "potato", "tomato"]},
     {"Connecting Word": "Body Parts", "Words": ["head", "shoulder", "knee", "toe"]},
-    {"Connecting Word": "Continents", "Words": ["north america", "oceania", "europe", "asia"]},
+    {"Connecting Word": "Continents", "Words": ["northamerica", "oceania", "europe", "asia"]},
     {"Connecting Word": "Planets", "Words": ["jupiter", "saturn", "uranus", "neptune"]},
     {"Connecting Word": "Elements", "Words": ["fire", "water", "earth", "air"]},
     {"Connecting Word": "Clothing Accessories", "Words": ["hat", "scarf", "gloves", "sunglasses"]}
