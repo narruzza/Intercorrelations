@@ -33,7 +33,7 @@ def play_again_function(): #Asks user if they want to play again
         if user_input == 'y':
             return True
         elif user_input == 'n':
-            typewriter_effect("Goodbye!")
+            typewriter_effect("Goodbye!\n")
             break
         else:
             typewriter_effect("Invalid input. Please enter Y or N")
@@ -54,9 +54,11 @@ def populate_grid(selected_categories, grid):
         row += 1
 
 def display_game_state(lives):
-    print("Lives: ", lives, "\n")
-    for row in grid:
-        print(row)
+    if not game_won:
+        print("Lives: ", lives, "\n")
+        typewriter_effect("Enter 'shuffle' at any point to shuffle the board\n\n")
+        for row in grid:
+            print(row)
 
 def select_categories(): #Selects categories for the game
     selected_categories = random.sample(categories, 4)
@@ -105,7 +107,9 @@ def get_guess(guessed_categories, selected_categories):
             return False
 
 def main():
+    global game_won
     global lives
+    game_won = False
     guessed_categories = []  #Dictionary to store guessed categories
     selected_categories = []  #List to store selected categories
     selected_categories = select_categories()
@@ -116,20 +120,25 @@ def main():
     shuffle_grid(grid)
     display_game_state(lives)
 
-    while lives > 0:
+    while lives > 0 and not game_won:
         if get_guess(guessed_categories, selected_categories):
-            #If the guess is correct, remove the guessed category from the list of selected categories
-            selected_categories.pop(0)
-        
-        #Check if all categories have been guessed
+            #Remove the guessed category from the list of selected categories
+            for category in selected_categories:
+                if sorted(category["Words"]) == sorted(guessed_categories[-1]["Guess"]):
+                    selected_categories.remove(category)
+                    break  #Exit the loop after removing the category
+
+        #If all the selected categories are removed, the player wins
         if not selected_categories:
-            print("Congratulations! You've won!")
-            return
+            game_won = True
 
         #Update game state and continue loop
         display_game_state(lives)
 
-    print("You lose!")
+    if game_won:
+        typewriter_effect("Congrats! You won!\n")
+    else:
+        typewriter_effect("You lose!\n")
     play_again_function()
 
 intercorrelations()
