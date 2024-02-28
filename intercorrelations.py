@@ -1,7 +1,8 @@
 import random
 #Imports a dictionary with categories to get selected_categories
 from categories import categories
-
+import time
+import sys
 lives = 4
 
 grid = [ #Empty grid that will be filled with selected_categories
@@ -10,6 +11,12 @@ grid = [ #Empty grid that will be filled with selected_categories
     ["Word", "Word", "Word", "Word"],
     ["Word", "Word", "Word", "Word"],
 ]
+
+def typewriter_effect(text):
+    for character in text:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.02)
 
 def shuffle_grid(grid):
     flat_grid = [word for row in grid for word in row] #Turns the grid into a list of all the words in the grid
@@ -26,10 +33,10 @@ def play_again_function(): #Asks user if they want to play again
         if user_input == 'y':
             return True
         elif user_input == 'n':
-            print("Goodbye!")
+            typewriter_effect("Goodbye!")
             break
         else:
-            print("Invalid input. Please enter Y or N")
+            typewriter_effect("Invalid input. Please enter Y or N")
 
 def intercorrelations():
     play_game = True
@@ -47,7 +54,7 @@ def populate_grid(selected_categories, grid):
         row += 1
 
 def display_game_state(lives):
-    print("Lives: ", lives)
+    print("Lives: ", lives, "\n")
     for row in grid:
         print(row)
 
@@ -64,33 +71,36 @@ def check_win(guessed_categories, selected_categories):
 def get_guess(guessed_categories, selected_categories):
     while True:
         global lives
-        guess = input("Enter four connected words (e.g., cake icecream pie pudding): ").lower().split()
+        guess = input("\nTake a guess (e.g., cake icecream pie pudding): ").lower().split()
 
         #Shuffle the grid if the user enters "shuffle"
         if guess == ["shuffle".lower()]:
             shuffle_grid(grid)
-            print("Grid shuffled!")
+            typewriter_effect("Grid shuffled!")
             display_game_state(lives)
             continue
         elif len(guess) != 4 or any(not word.isalpha() for word in guess): #Guess must be in correct syntax or user trys again
-            print("Invalid input. Please enter four alphabetical words separated by spaces.")
+            typewriter_effect("Invalid input. Please enter four alphabetical words separated by spaces.")
             get_guess(guessed_categories, selected_categories)
 
         #Check if the guess has already been made
         if guess in [item["Guess"] for item in guessed_categories]:
-            print("You already guessed this category. Try again.")
+            typewriter_effect("You already guessed this category. Try again.")
             continue
+
+        #Sort the guessed words so that the same words cannot be guessed in a different order
+        guess.sort()
 
         #Add the guess to the guessed categories dictionary
         guessed_categories.append({"Guess": guess})
 
         #Check if the guess matches any of the selected categories
         for category in selected_categories:
-            if category["Words"] == guess:
-                print("Correct guess!")
+            if sorted(category["Words"]) == sorted(guess):
+                typewriter_effect("Correct guess!")
                 return True
         else:
-            print("Incorrect guess!")
+            typewriter_effect("Incorrect guess!")
             lives -= 1
             return False
 
@@ -101,8 +111,8 @@ def main():
     selected_categories = select_categories()
     populate_grid(selected_categories, grid) #Populate the grid with words from the selected categories
 
-    print("Welcome to the Intercorrelations!")
-    print("Here's the grid of words you have to group into categories: \n")
+    typewriter_effect("\nWelcome to the Intercorrelations! \n")
+    typewriter_effect("Here's the grid of words you have to group into categories: \n")
     shuffle_grid(grid)
     display_game_state(lives)
 
