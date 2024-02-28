@@ -27,7 +27,7 @@ def play_again_function(): #Asks user if they want to play again
             return True
         elif user_input == 'n':
             print("Goodbye!")
-            return False
+            break
         else:
             print("Invalid input. Please enter Y or N")
 
@@ -63,14 +63,18 @@ def check_win(guessed_categories, selected_categories):
 
 def get_guess(guessed_categories, selected_categories):
     while True:
+        global lives
         guess = input("Enter four connected words (e.g., cake icecream pie pudding): ").lower().split()
 
         #Shuffle the grid if the user enters "shuffle"
-        if guess and guess[0] == "shuffle":
+        if guess == ["shuffle".lower()]:
             shuffle_grid(grid)
             print("Grid shuffled!")
             display_game_state(lives)
             continue
+        elif len(guess) != 4 or any(not word.isalpha() for word in guess): #Guess must be in correct syntax or user trys again
+            print("Invalid input. Please enter four alphabetical words separated by spaces.")
+            get_guess(guessed_categories, selected_categories)
 
         #Check if the guess has already been made
         if guess in [item["Guess"] for item in guessed_categories]:
@@ -87,6 +91,7 @@ def get_guess(guessed_categories, selected_categories):
                 return True
         else:
             print("Incorrect guess!")
+            lives -= 1
             return False
 
 def main():
