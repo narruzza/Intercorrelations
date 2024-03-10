@@ -102,6 +102,26 @@ def check_win(guessed_categories, selected_categories):
             return False
     return True #If all selected categories are found in the guessed categories, return True (game won)
 
+def reshape_grid(grid):
+    #Flatten the grid, excluding empty strings, and preserve the order
+    flat_grid = [word for row in grid for word in row if word]
+
+    #Calculate the new number of rows
+    num_rows = len(grid) - 1 if len(grid) > 1 else 1  #Ensure there's at least one row
+    num_cols = len(grid[0])
+
+    #Create a new grid with one fewer row
+    new_grid = [["" for _ in range(num_cols)] for _ in range(num_rows)]
+
+    #Fill in the new grid with the remaining words
+    for i, word in enumerate(flat_grid):
+        row_index = i // num_cols
+        col_index = i % num_cols
+        if row_index < num_rows:
+            new_grid[row_index][col_index] = word
+
+    return new_grid
+
 def get_guess(guessed_categories, selected_categories, grid, correct_guesses_grid):
     global lives
     while True:
@@ -127,10 +147,12 @@ def get_guess(guessed_categories, selected_categories, grid, correct_guesses_gri
 
         #Add the guess to the guessed categories dictionary
         guessed_categories.append({"Guess": guess})
+        
         for category in selected_categories:
             if sorted(category["Words"]) == sorted(guess):
                 transfer_correct_guess_to_grid(guess, grid, correct_guesses_grid)
                 typewriter_effect("\033[1;37mCorrect guess!\033[0m")
+                grid = reshape_grid(grid)
                 return True
             
         typewriter_effect("\033[1;37mIncorrect guess!\033[0m")
@@ -139,6 +161,7 @@ def get_guess(guessed_categories, selected_categories, grid, correct_guesses_gri
 
 def main():
     global lives
+    global grid
     game_won = False
     guessed_categories = [] #Dictionary to store guessed categories
     selected_categories = select_categories() #List to store selected categories
