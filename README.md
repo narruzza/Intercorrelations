@@ -19,13 +19,17 @@ Developed by myself Nick Arruzza, i am a Year 11 student studying in Software En
 5. **Gameplay:** Submit four connected words to reveal categories.
 
 ## Installation
+You can download the v1.0 release directly from the Releases section.
 
+1. Clone the repository: `git clone https://github.com/yourusername/intercorrelations.git`
+2. Navigate to the game directory: `cd intercorrelations`
+3. Run the game: `python intercorrelations.py`
 
 ## Contributing
 As a solo project, I'm the main contributor. Feedback and suggestions are welcome!
 
 ## License
-
+This project is licensed under the "Strictly Not for Sharing or Alteration (SNSA)" License. All rights reserved exclusively to the creator. No part of this work shall be used in whatever form or by whatever means—this shall include the contents: copying, modifying, distributing, or disseminating without the express prior written permission of the creator. The game is provided "as is," for personal entertainment use only. The creator is not to be held liable in the case of any use other than the intended. Any violation of these terms can and will be enforced to the fullest extent of the law. 
 
 ## Contact
 To contact me or give feedback on the game you can email: intercorrelationsgame@outlook.com
