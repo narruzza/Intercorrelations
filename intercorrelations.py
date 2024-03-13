@@ -103,24 +103,26 @@ def check_win(guessed_categories, selected_categories):
     return True #If all selected categories are found in the guessed categories, return True (game won)
 
 def reshape_grid(grid):
-    #Flatten the grid, excluding empty strings, and preserve the order
+    #Flatten the grid
     flat_grid = [word for row in grid for word in row if word]
+    
+    #Calculate the new number of rows and columns
+    num_rows = max(len(grid) - 1, 1)  #Ensure there is at least one row
+    num_cols = len(grid[0]) if num_rows > 1 else len(flat_grid)
 
-    #Calculate the new number of rows
-    num_rows = len(grid) - 1 if len(grid) > 1 else 1  #Ensure there's at least one row
-    num_cols = len(grid[0])
-
-    #Create a new grid with one fewer row
+    # Initialize the new grid with empty strings
     new_grid = [["" for _ in range(num_cols)] for _ in range(num_rows)]
 
     #Fill in the new grid with the remaining words
-    for i, word in enumerate(flat_grid):
-        row_index = i // num_cols
-        col_index = i % num_cols
-        if row_index < num_rows:
-            new_grid[row_index][col_index] = word
+    word_index = 0
+    for row in range(num_rows):
+        for col in range(num_cols):
+            if word_index < len(flat_grid):
+                new_grid[row][col] = flat_grid[word_index]
+                word_index += 1
 
-    return new_grid
+    grid = new_grid
+    return grid
 
 def get_guess(guessed_categories, selected_categories, grid, correct_guesses_grid):
     global lives
