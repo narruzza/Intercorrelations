@@ -3,6 +3,10 @@ from time import sleep
 from sys import stdout
 #Imports a dictionary with categories to get selected_categories
 from categories import categories
+from os import system
+
+system('printf "\\e[8;40;150t"')
+system('mode con: cols=150 lines=40')
 
 lives = 4
 
@@ -65,13 +69,18 @@ def display_game_state(lives, grid, correct_guesses_grid): #function that prints
     display_grid(correct_guesses_grid)
 
 def display_grid(grid):
-    #Find the length of the longest word in the grid
-    max_word_length = max(len(word) if word else 0 for row in grid for word in row)
+    max_word_length = max(len(word) if word else 0 for row in grid for word in row) + 5 #Find the length of the longest word in the grid
+    horizontal_line = '-' * (max_word_length + 3) * len(grid[0])
+
     #Print the grid with remaining words
+    print("\033[1;37m" + horizontal_line + "\033[0m")
     for row in grid:
-        for word in row:
-            print("\033[1;37m" + (word.ljust(max_word_length) if word else "".ljust(max_word_length)) + "\033[0m", end=" | ")
         print()
+        for word in row:
+            print("\033[1;37m" + (word.center(max_word_length) if word else "".center(max_word_length)) + "\033[0m", "\033[1;37m", end=" | " "\033[0m")
+        print()
+        print()
+        print("\033[1;37m" + horizontal_line + "\033[0m")
 
 def select_categories():
     selected_categories = sample(categories, 4)
