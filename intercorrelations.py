@@ -19,21 +19,21 @@ grid = [
 
 correct_guesses_grid = [["" for _ in range(4)] for _ in range(4)]  #Empty grid that will be filled with selected_categories
 
-def choose_categorie(): #Asks user which category they want for the game
-    choice = input(typewriter_effect("\033[1;37mChoose a category for the Intercorrelations game (Fortnite, Minecraft, COD, Fifa or AmongUs): \033[0m")).lower()
-    if choice == "fortnite":
-        return fortnite_categories
-    elif choice == "minecraft":
-        return minecraft_categories
-    elif choice == "cod":
-        return cod_categories
-    elif choice == "fifa":
-        return fifa_categories
-    elif choice == "amongus":
-        return among_us_categories
-    else:
-        typewriter_effect("\033[1;37mInvalid input. Please enter Fortnite, Minecraft, COD, Fifa or AmongUs\033[0m\n")
-        choose_categorie()
+def choose_category(): #Asks user which category they want for the game
+    while True:
+        choice = input(typewriter_effect("\033[1;37mChoose a category for the Intercorrelations game (Fortnite, Minecraft, COD, Fifa or AmongUs):\033[0m")).lower()
+        if choice == "fortnite":
+            return fortnite_categories
+        elif choice == "minecraft":
+            return minecraft_categories
+        elif choice == "cod":
+            return cod_categories
+        elif choice == "fifa":
+            return fifa_categories
+        elif choice == "amongus":
+            return among_us_categories
+        else:
+            typewriter_effect("\033[1;37mInvalid input. Please enter Fortnite, Minecraft, COD, Fifa or AmongUs\033[0m\n")
 
 def typewriter_effect(text): #Adds an effect to printed text
     for character in text:
@@ -81,6 +81,7 @@ def populate_grid(selected_categories, grid): #Takes the selected categoiries an
 
 def display_game_state(lives, grid, correct_guesses_grid): #function that prints lives and both grids
     print("\033[1;37mLives:", lives, "\n\033[0m")
+    typewriter_effect("\033[1;37mType 'SHUFFLE' at any time to shuffle the grid\n\033[0m")
     print("\033[1;31m\033[4mMain Grid:\033[0m")
     display_grid(grid)
     print("\033[1;33m\033[4mCorrect Guesses Grid:\033[0m")
@@ -101,7 +102,7 @@ def display_grid(grid): #Prints the grid
         print("\033[1;37m" + horizontal_line + "\033[0m")
 
 def select_categories(): #Selects 4 random categories from the selected_categories
-    selected_categories = sample(choose_categorie(), 4)
+    selected_categories = sample(choose_category(), 4)
     return selected_categories
 
 def transfer_correct_guess_to_grid(guess, grid, correct_grid): #Removes the correct guess from the main grid and puts it into the correct guesses grid
