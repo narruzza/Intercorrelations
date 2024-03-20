@@ -2,7 +2,7 @@ from random import shuffle, sample
 from time import sleep
 from sys import stdout
 #Imports a dictionary with categories to get selected_categories
-from categories import categories
+from categories import fortnite_categories, minecraft_categories, cod_categories, fifa_categories, among_us_categories
 from os import system
 
 system('printf "\\e[8;40;150t"')
@@ -19,13 +19,29 @@ grid = [
 
 correct_guesses_grid = [["" for _ in range(4)] for _ in range(4)]  #Empty grid that will be filled with selected_categories
 
-def typewriter_effect(text):
+def choose_categorie(): #Asks user which category they want for the game
+    choice = input(typewriter_effect("\033[1;37mChoose a category for the Intercorrelations game (Fortnite, Minecraft, COD, Fifa or AmongUs): \033[0m")).lower()
+    if choice == "fortnite":
+        return fortnite_categories
+    elif choice == "minecraft":
+        return minecraft_categories
+    elif choice == "cod":
+        return cod_categories
+    elif choice == "fifa":
+        return fifa_categories
+    elif choice == "amongus":
+        return among_us_categories
+    else:
+        typewriter_effect("\033[1;37mInvalid input. Please enter Fortnite, Minecraft, COD, Fifa or AmongUs\033[0m\n")
+        choose_categorie()
+
+def typewriter_effect(text): #Adds an effect to printed text
     for character in text:
         stdout.write(character)
         stdout.flush()
         sleep(0.02)
 
-def shuffle_grid(grid):
+def shuffle_grid(grid): #Shuffles the grid
     flat_grid = [word for row in grid for word in row if word != ""] #Turns the grid into a list of all the words in the grid
     shuffle(flat_grid)
     index = 0
@@ -36,17 +52,19 @@ def shuffle_grid(grid):
                 index += 1
 
 def play_again_function(): #Asks user if they want to play again
-    while True:
-        user_input = input("\033[1;37mWanna play Intercorrelations? (Y or N)\033[0m").lower()
+    play_game_question = True
+    while play_game_question == True:
+        user_input = input("\033[1;37mWanna play Intercorrelations again? (Y or N)\033[0m").lower()
         if user_input == 'y':
             return True
         elif user_input == 'n':
             typewriter_effect("\033[1;37mGoodbye!\n\033[0m")
-            break
+            play_game_question = False
+            quit()
         else:
             typewriter_effect("\033[1;37mInvalid input. Please enter Y or N\033[0m")
 
-def intercorrelations():
+def intercorrelations(): #Run Game
     play_game = True
     while play_game:
         main()
@@ -68,7 +86,7 @@ def display_game_state(lives, grid, correct_guesses_grid): #function that prints
     print("\033[1;33m\033[4mCorrect Guesses Grid:\033[0m")
     display_grid(correct_guesses_grid)
 
-def display_grid(grid):
+def display_grid(grid): #Prints the grid
     max_word_length = max(len(word) if word else 0 for row in grid for word in row) + 5 #Find the length of the longest word in the grid
     horizontal_line = '-' * (max_word_length + 3) * len(grid[0])
 
@@ -82,8 +100,8 @@ def display_grid(grid):
         print()
         print("\033[1;37m" + horizontal_line + "\033[0m")
 
-def select_categories():
-    selected_categories = sample(categories, 4)
+def select_categories(): #Selects 4 random categories from the selected_categories
+    selected_categories = sample(choose_categorie(), 4)
     return selected_categories
 
 def transfer_correct_guess_to_grid(guess, grid, correct_grid): #Removes the correct guess from the main grid and puts it into the correct guesses grid
@@ -111,7 +129,7 @@ def check_win(guessed_categories, selected_categories):
             return False
     return True #If all selected categories are found in the guessed categories, return True (game won)
 
-def reshape_grid(grid):
+def reshape_grid(grid): #
     #Flatten the grid
     flat_grid = [word for row in grid for word in row if word]
     
@@ -170,7 +188,7 @@ def get_guess(guessed_categories, selected_categories, grid, correct_guesses_gri
         lives -= 1
         return False
 
-def main():
+def main(): #Main Game Loop
     global lives
     global grid
     game_won = False
