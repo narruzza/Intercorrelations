@@ -1,5 +1,7 @@
 # Intercorrelations Game
-![DALL·E 2024-03-11 09 10 37 - Create a logo for a game named 'Intercorrelations'  The logo should symbolize the essence of interconnectedness and correlation, reflecting the game's](https://github.com/narruzza/Intercorrelations/assets/128012686/7332d720-bf23-476b-93be-b3d348017387)
+<p align="center">
+  <img src="https://github.com/narruzza/Intercorrelations/assets/128012686/7332d720-bf23-476b-93be-b3d348017387" width="600" height="600" alt="intercorrelations_logo">
+</p>
 
 ## Introduction
 Intercorrelations is a clone game of the popular game Connections by The New York Times where the user categorizes groups of 4 words challenging players to group words based on hidden connections, testing their vocabulary and trivia knowledge.
