@@ -78,6 +78,13 @@ fifa_categories = [
     {"Connecting Word": "Gear", "Words": ["Boots", "Jerseys", "Shinguards", "Gloves"]},
 ]
 
+rocketleague_categories = [
+    {"Connecting Word": "Modes", "Words": ["ReceidingHairline", "EggHead", "UglyMoustache", "RottenTeeth"]},
+    {"Connecting Word": "Positions", "Words": ["EnglishBreakfast", "BangersNMash", "Pint", "Muffin"]},
+    {"Connecting Word": "Skills", "Words": ["Soccer", "Liverpool", "ManCityBetter", "WorldCup"]},
+    {"Connecting Word": "Tactics", "Words": ["Waffle", "Kerfuffle", "Chuffed", "PoppyCock"]},
+]
+
 for category in fortnite_categories:
     category["Words"] = [word.lower() for word in category["Words"]]
 for category in minecraft_categories:
@@ -87,4 +94,6 @@ for category in cod_categories:
 for category in among_us_categories:
     category["Words"] = [word.lower() for word in category["Words"]]
 for category in fifa_categories:
+    category["Words"] = [word.lower() for word in category["Words"]]
+for category in rocketleague_categories:
     category["Words"] = [word.lower() for word in category["Words"]]

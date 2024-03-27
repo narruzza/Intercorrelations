@@ -2,7 +2,7 @@ from random import shuffle, sample
 from time import sleep
 from sys import stdout
 #Imports a dictionary with categories to get selected_categories
-from categories import fortnite_categories, minecraft_categories, cod_categories, fifa_categories, among_us_categories
+from categories import fortnite_categories, minecraft_categories, cod_categories, fifa_categories, among_us_categories, rocketleague_categories
 from os import system
 
 system('printf "\\e[8;40;150t"')
@@ -19,9 +19,9 @@ grid = [
 
 correct_guesses_grid = [["" for _ in range(4)] for _ in range(4)]  #Empty grid that will be filled with selected_categories
 
-def choose_category(): #Asks user which category they want for the game
+def choose_theme(): #Asks user which theme they want for the game
     while True:
-        choice = input(typewriter_effect("\033[1;37mChoose a category for the Intercorrelations game (Fortnite, Minecraft, COD, Fifa or AmongUs):\033[0m")).lower()
+        choice = input("\033[1;37mChoose a theme for the Intercorrelations game (Fortnite, Minecraft, COD, Fifa or AmongUs):\033[0m").lower()
         if choice == "fortnite":
             return fortnite_categories
         elif choice == "minecraft":
@@ -32,6 +32,8 @@ def choose_category(): #Asks user which category they want for the game
             return fifa_categories
         elif choice == "amongus":
             return among_us_categories
+        elif choice == "fong":
+            return rocketleague_categories
         else:
             typewriter_effect("\033[1;37mInvalid input. Please enter Fortnite, Minecraft, COD, Fifa or AmongUs\033[0m\n")
 
@@ -102,7 +104,7 @@ def display_grid(grid): #Prints the grid
         print("\033[1;37m" + horizontal_line + "\033[0m")
 
 def select_categories(): #Selects 4 random categories from the selected_categories
-    selected_categories = sample(choose_category(), 4)
+    selected_categories = sample(choose_theme(), 4)
     return selected_categories
 
 def transfer_correct_guess_to_grid(guess, grid, correct_grid): #Removes the correct guess from the main grid and puts it into the correct guesses grid
@@ -217,8 +219,10 @@ def main(): #Main Game Loop
         #Update game state and continue loop
         display_game_state(lives, grid, correct_guesses_grid)
 
-    if game_won:
+    if game_won and lives > 1:
         typewriter_effect("\033[1;37mCongrats! You won!\n\033[0m")
+    elif game_won:
+        typewriter_effect("\033[1;37mPhew!\n\033[0m")
     else:
         typewriter_effect("\033[1;37mYou lose!\n\033[0m")
     play_again_function()
