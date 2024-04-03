@@ -10,14 +10,19 @@ system('mode con: cols=150 lines=40')
 
 lives = 4
 
-grid = [
-    ["Word", "Word", "Word", "Word"],
-    ["Word", "Word", "Word", "Word"],
-    ["Word", "Word", "Word", "Word"],
-    ["Word", "Word", "Word", "Word"],
-]
+grid = [] #Main grid for the game
+for _ in range(4):
+    grid_row = []
+    for _ in range(4):
+        grid_row.append("Word")
+    grid.append(grid_row)
 
-correct_guesses_grid = [["" for _ in range(4)] for _ in range(4)]  #Empty grid that will be filled with selected_categories
+correct_guesses_grid = [] #Empty grid that will be filled with correctly guessed categories
+for _ in range(4):
+    correct_guesses_grid_row = []
+    for _ in range(4):
+        correct_guesses_grid_row.append("")
+    correct_guesses_grid.append(correct_guesses_grid_row)
 
 def choose_theme(): #Asks user which theme they want for the game
     while True:
@@ -80,12 +85,17 @@ def typewriter_effect(text): #Adds an effect to printed text
         sleep(0.02)
 
 def shuffle_grid(grid): #Shuffles the grid
-    flat_grid = [word for row in grid for word in row if word != ""] #Turns the grid into a list of all the words in the grid
+    #Turns the grid into a list of all the words in the grid
+    flat_grid = []
+    for row in grid:
+        for word in row:
+            if word != "":
+                flat_grid.append(word)
     shuffle(flat_grid)
     index = 0
     for row in range(len(grid)): #Puts grid back together with the shuffled words
         for col in range(len(grid[row])):
-            if grid[row][col] != "": 
+            if grid[row][col] != "":
                 grid[row][col] = flat_grid[index]
                 index += 1
 
@@ -125,8 +135,14 @@ def display_game_state(lives, grid, correct_guesses_grid): #function that prints
     print("\033[1;33m\033[4mCorrect Guesses Grid:\033[0m")
     display_grid(correct_guesses_grid)
 
-def display_grid(grid): #Prints the grid
-    max_word_length = max(len(word) if word else 0 for row in grid for word in row) + 5 #Find the length of the longest word in the grid
+def display_grid(grid):  #Prints the grid
+    max_word_length = 0
+    for row in grid:
+        for word in row:
+            if word:  #Checking if word is not an empty string
+                max_word_length = max(max_word_length, len(word))
+    max_word_length += 5  #Adding 5 to the length of the longest word
+
     horizontal_line = '-' * (max_word_length + 3) * len(grid[0])
 
     #Print the grid with remaining words
@@ -168,16 +184,21 @@ def check_win(guessed_categories, selected_categories):
             return False
     return True #If all selected categories are found in the guessed categories, return True (game won)
 
-def reshape_grid(grid): #
-    #Flatten the grid
-    flat_grid = [word for row in grid for word in row if word]
-    
-    #Calculate the new number of rows and columns
-    num_rows = max(len(grid) - 1, 1)  #Ensure there is at least one row
+def reshape_grid(grid):
+    flat_grid = []
+    for row in grid: #Put the 4x4 grid in a 1x16 list
+        for word in row:
+            if word:
+                flat_grid.append(word)
+
+    num_rows = max(len(grid) - 1, 1)
     num_cols = len(grid[0]) if num_rows > 1 else len(flat_grid)
 
-    # Initialize the new grid with empty strings
-    new_grid = [["" for _ in range(num_cols)] for _ in range(num_rows)]
+    #Initialize the new grid with empty strings
+    new_grid = []
+    for _ in range(num_rows):
+        new_row = ["" for _ in range(num_cols)]
+        new_grid.append(new_row)
 
     #Fill in the new grid with the remaining words
     word_index = 0
@@ -194,7 +215,6 @@ def get_guess(guessed_categories, selected_categories, grid, correct_guesses_gri
     global lives
     while True:
         guess = input("\033[1;37m\nTake a guess (e.g., cake icecream pie pudding): \033[0m").lower().split()
-
         #Shuffle the grid if the user enters "shuffle"
         if guess == ["shuffle"]:
             shuffle_grid(grid)
@@ -204,18 +224,24 @@ def get_guess(guessed_categories, selected_categories, grid, correct_guesses_gri
         elif len(guess) != 4 or any(not word.isalpha() for word in guess): #Guess must be in correct syntax or user trys again
             typewriter_effect("\033[1;37mInvalid input. Please enter four alphabetical words separated by spaces.\033[0m")
             continue
-
+        
         #Check if the guess has already been made
-        if guess in [item["Guess"] for item in guessed_categories]:
+        found = False
+        for item in guessed_categories:
+            if guess == item["Guess"]:
+                found = True
+                break
+
+        if found:
             typewriter_effect("\033[1;37mYou already guessed this category. Try again.\033[0m")
             continue
-
+        
         #Sort the guessed words so that the same words cannot be guessed in a different order
         guess.sort()
 
-        #Add the guess to the guessed categories dictionary
         guessed_categories.append({"Guess": guess})
-        
+
+        #Add the guess to the guessed categories dictionary
         for category in selected_categories:
             if sorted(category["Words"]) == sorted(guess):
                 transfer_correct_guess_to_grid(guess, grid, correct_guesses_grid)
@@ -223,7 +249,7 @@ def get_guess(guessed_categories, selected_categories, grid, correct_guesses_gri
                 print("\033[1;33m\nCategory:", category["Connecting Word"], "\n\033[0m")
                 grid = reshape_grid(grid)
                 return True
-            
+
         typewriter_effect("\033[1;37mIncorrect guess!\033[0m")
         lives -= 1
         return False
