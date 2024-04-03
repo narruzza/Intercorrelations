@@ -262,6 +262,5 @@ def main(): #Main Game Loop
         typewriter_effect("\033[1;37mPhew!\n\033[0m")
     else:
         typewriter_effect("\033[1;37mYou lose!\n\033[0m")
-    play_again_function()
 
 intercorrelations()
