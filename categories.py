@@ -84,6 +84,7 @@ rocketleague_categories = [
     {"Connecting Word": "Skills", "Words": ["Soccer", "Liverpool", "ManCityBetter", "WorldCup"]},
     {"Connecting Word": "Tactics", "Words": ["Waffle", "Kerfuffle", "Chuffed", "PoppyCock"]},
 ]
+# test
 
 for category in fortnite_categories:
     category["Words"] = [word.lower() for word in category["Words"]]
